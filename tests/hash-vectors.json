@@ -1,0 +1,79 @@
+[
+  {
+    "id": "empty",
+    "source": "",
+    "utf8_hex": "",
+    "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "line_count": 0
+  },
+  {
+    "id": "abc",
+    "source": "abc",
+    "utf8_hex": "616263",
+    "digest": "sha256:ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+    "line_count": 1
+  },
+  {
+    "id": "abc-lf",
+    "source": "abc\n",
+    "utf8_hex": "6162630a",
+    "digest": "sha256:edeaaff3f1774ad2888673770c6d64097e391bc362d7d6fb34982ddf0efd18cb",
+    "line_count": 1
+  },
+  {
+    "id": "blank-line",
+    "source": "\n",
+    "utf8_hex": "0a",
+    "digest": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "line_count": 1
+  },
+  {
+    "id": "two-lines",
+    "source": "a\n\n",
+    "utf8_hex": "610a0a",
+    "digest": "sha256:a7da489976d0047490617adb4f7a1f27f7af8b52a5176fd002ffe471863520ab",
+    "line_count": 2
+  },
+  {
+    "id": "trailing-spaces",
+    "source": "a  \n",
+    "utf8_hex": "6120200a",
+    "digest": "sha256:18ff741cc2779a320d7520277d194c1ad8a842a67b4b0911d9cc5bd7e2eef9b8",
+    "line_count": 1
+  },
+  {
+    "id": "nfc-e",
+    "source": "é",
+    "utf8_hex": "c3a9",
+    "digest": "sha256:4a99557e4033c3539de2eb65472017cad5f9557f7a0625a09f1c3f6e2ba69c4c",
+    "line_count": 1
+  },
+  {
+    "id": "nfd-e",
+    "source": "é",
+    "utf8_hex": "65cc81",
+    "digest": "sha256:bf12767b0f2a56b2190075bae8169f656e3ce8d6357d4aff184bc6c7ea48f9f6",
+    "line_count": 1
+  },
+  {
+    "id": "cjk",
+    "source": "付款 → 出貨\n",
+    "utf8_hex": "e4bb98e6acbe20e2869220e587bae8b2a80a",
+    "digest": "sha256:9d5889a162a1b95cae6c22191aaae548daf39304f06b2cabb2680f9ff2f35b34",
+    "line_count": 1
+  },
+  {
+    "id": "xml-special",
+    "source": "A & B < C ]]>\n",
+    "utf8_hex": "4120262042203c2043205d5d3e0a",
+    "digest": "sha256:de5b7de2e0d3eddd19434ce07aa8995f689da85d65fdbbfa739a60e526a230e6",
+    "line_count": 1
+  },
+  {
+    "id": "source-bom",
+    "source": "﻿abc",
+    "utf8_hex": "efbbbf616263",
+    "digest": "sha256:1c28dc3f1f804a1ad9c9b4b4cf5e2658d16ad4ed08e3020d04a8d2865018947c",
+    "line_count": 1
+  }
+]

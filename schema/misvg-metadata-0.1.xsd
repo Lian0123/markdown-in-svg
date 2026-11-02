@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Informative helper schema: validate only m:document, not the SVG envelope.
+     Semantic rules in MISVG-SPEC-0001 take precedence. No network imports. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:m="https://example.org/ns/markdown-in-svg/0.1"
+           targetNamespace="https://example.org/ns/markdown-in-svg/0.1"
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:simpleType name="identifier">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/><xs:maxLength value="64"/>
+      <xs:pattern value="[A-Za-z][A-Za-z0-9._-]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="digest">
+    <xs:restriction base="xs:string">
+      <xs:length value="71"/><xs:pattern value="sha256:[0-9a-f]{64}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="uuid4urn">
+    <xs:restriction base="xs:string">
+      <xs:length value="45"/>
+      <xs:pattern value="urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="revision">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="9007199254740991"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="rendererName">
+    <xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="128"/></xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="rendererVersion">
+    <xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="64"/></xs:restriction>
+  </xs:simpleType>
+  <xs:element name="document">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="source">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="media-type" use="required" fixed="text/markdown"/>
+                <xs:attribute name="dialect" use="required" fixed="commonmark-0.31.2"/>
+                <!-- xml:space=preserve is checked procedurally. -->
+                <xs:anyAttribute namespace="http://www.w3.org/XML/1998/namespace" processContents="skip"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="presentation">
+          <xs:complexType>
+            <xs:attribute name="root-ref" type="m:identifier" use="required"/>
+            <xs:attribute name="source-digest" type="m:digest" use="required"/>
+            <xs:attribute name="renderer" type="m:rendererName" use="required"/>
+            <xs:attribute name="renderer-version" type="m:rendererVersion" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="bindings" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="bind" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="target" type="m:identifier" use="required"/>
+                  <xs:attribute name="start-line" type="xs:positiveInteger" use="required"/>
+                  <xs:attribute name="end-line" type="xs:positiveInteger" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="extensions" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence><xs:any namespace="##other" processContents="skip" minOccurs="1" maxOccurs="unbounded"/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="version" use="required" fixed="0.1"/>
+      <xs:attribute name="profile" use="required" fixed="static"/>
+      <xs:attribute name="doc-id" type="m:uuid4urn" use="required"/>
+      <xs:attribute name="revision" type="m:revision" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

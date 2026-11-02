@@ -1,0 +1,952 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MISVG 0.1 — Document Interchange Specification</title>
+<style>
+:root{color-scheme:light;--ink:#183244;--accent:#186b54;--line:#d9e2df}
+*{box-sizing:border-box}body{margin:0;background:#eff3f1;color:#24363d;font:16px/1.85 -apple-system,BlinkMacSystemFont,"PingFang TC","Hiragino Sans","Noto Sans CJK TC",sans-serif}
+main{max-width:1050px;margin:40px auto;padding:56px 64px;background:white;border-top:8px solid var(--accent);box-shadow:0 8px 35px #1633260c}
+h1{font-size:34px;line-height:1.4;color:var(--ink);margin-top:0}h2{font-size:25px;color:var(--ink);margin:50px 0 18px;padding-bottom:9px;border-bottom:1px solid var(--line);scroll-margin-top:20px}h3{font-size:19px;margin:26px 0 10px;color:var(--accent)}
+a{color:#126d8b;text-underline-offset:3px}table{border-collapse:collapse;width:100%;font-size:14px;margin:20px 0;overflow-wrap:anywhere}th{background:#eaf1ed;text-align:left;color:var(--ink)}th,td{border:1px solid var(--line);padding:10px 12px;vertical-align:top}tr:nth-child(even) td{background:#fafcfb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.89em;background:#eef3f1;padding:2px 4px;border-radius:3px;overflow-wrap:anywhere}pre{background:#132b39;color:#e9f2ee;padding:20px;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}pre code{background:none;padding:0;color:inherit}li{margin:7px 0}strong{color:var(--ink)}
+.notice{background:#eaf1ed;border-left:4px solid var(--accent);padding:14px 20px;margin-bottom:30px;font-size:14px}.toplink{float:right;font-size:13px}
+@media(max-width:700px){main{margin:0;padding:26px 18px}h1{font-size:27px}table{font-size:12px}th,td{padding:7px}}
+@media print{@page{size:A4;margin:17mm 16mm}body{background:white;font-size:10pt}main{margin:0;max-width:none;padding:0;border:0;box-shadow:none}h1{font-size:24pt}h2{font-size:16pt;break-after:avoid}h3{font-size:12pt;break-after:avoid}tr,pre{break-inside:avoid}table{font-size:8.5pt}a{color:inherit}pre{background:#eef3f1;color:#183244}.notice{font-size:9pt}}
+</style></head><body><main>
+<nav aria-label="Language" class="notice"><a href="MISVG-0.1.en.html" lang="en" hreflang="en" aria-current="page">English (default)</a> · <a href="MISVG-0.1.zh-Hant.html" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a> · <a href="MISVG-0.1.ja.html" lang="ja" hreflang="ja">日本語</a><br>MISVG-SPEC-0001 · Draft 02 · 2026-11-02<br>Independent specification draft; not approved by IEEE or IETF. <a href="examples/order-flow.en.misvg.svg">Open SVG example</a> · <a href="MISVG-0.1.en.md">Markdown source</a></nav>
+<h1 id="markdown-in-svg-misvg-document-interchange-specification">Markdown-in-SVG (MISVG) Document Interchange Specification</h1>
+<p><strong>Specification for Markdown-in-SVG Document Interchange</strong></p>
+<table>
+<thead>
+<tr>
+<th>Document control</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Document identifier</td>
+<td>MISVG-SPEC-0001</td>
+</tr>
+<tr>
+<td>Draft revision</td>
+<td>0.1.1 / Draft 02</td>
+</tr>
+<tr>
+<td>Wire version</td>
+<td><code>0.1</code></td>
+</tr>
+<tr>
+<td>Date</td>
+<td>2026-11-02</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Independent project specification draft for implementation and review</td>
+</tr>
+<tr>
+<td>Specification language</td>
+<td>English (en), default and authoritative; Traditional Chinese (zh-Hant) and Japanese (ja) translations</td>
+</tr>
+<tr>
+<td>Editor / maintaining organization</td>
+<td>To be designated; this revision was drafted with AI assistance</td>
+</tr>
+<tr>
+<td>Approval status</td>
+<td>Not approved by IEEE, IETF, W3C, or another standards organization</td>
+</tr>
+</tbody>
+</table>
+<h2 id="status-of-this-memo">Status of This Memo</h2>
+<p>This document proposes a new Markdown-in-SVG interchange format; it is not a reproduction of an existing standard. Its organization draws on IEEE technical standards: overview, normative references, definitions, requirements, and annexes. Requirement levels follow RFC 2119 and RFC 8174. Security, IANA, and interoperability provisions are also included.</p>
+<p>This is an independent draft using a combined editorial structure. <strong>It does not claim IEEE editorial approval and is not an RFC, a submitted Internet-Draft, or an IEEE P-series draft.</strong> <code>MISVG-SPEC-0001</code> is a project identifier, not a number assigned by any standards organization. Formal submission requires adaptation to the selected organization's procedures, templates, language, rights statements, and editorial requirements. This document does not select a public license on the user's behalf; the rights holder must decide before external publication.</p>
+<p>English is the default reading language and the authoritative text for resolving discrepancies among translations. Traditional Chinese and Japanese are complete companion translations with matching clause and test identifiers. Language selection does not change the wire format, identifiers, or requirements. Revision 0.1.1 adds multilingual publication and language policy without changing wire version 0.1.</p>
+<p>The abstract, status statement, and contents are informative. Clauses 1–15 and Annexes A and B are normative; Annexes C–F are informative. If a machine-readable attachment differs from the main text, the main text and normative annexes take precedence.</p>
+<h2 id="abstract">Abstract</h2>
+<p>MISVG packages editable Markdown source, source-to-view bindings, and a static SVG view in a single UTF-8 XML document. Markdown is the sole authoritative source of content; SVG is its visual representation. Ordinary SVG viewers can display the document, while MISVG-aware tools can extract, validate, edit, and regenerate it. This specification defines the container, character handling, source digest, version control, static rendering subset, bindings, error handling, and conformance requirements. A matching digest supports only source-binding checks: it does not establish semantic correctness of the view or trustworthiness of the document.</p>
+<h2 id="contents">Contents</h2>
+<ol>
+<li>Overview</li>
+<li>Normative References</li>
+<li>Terms, Definitions, and Requirement Levels</li>
+<li>Architecture and Authoritative Source</li>
+<li>XML Container and Fields</li>
+<li>Markdown and Character Handling</li>
+<li>Static Rendering Profile</li>
+<li>Digests, Synchronization, and Editing Transactions</li>
+<li>Source Bindings</li>
+<li>Extensions, Versions, and Preservation</li>
+<li>Conformance and Interoperability</li>
+<li>Error Handling</li>
+<li>Security and Privacy Considerations</li>
+<li>IANA and Identifier Considerations</li>
+<li>Version Governance and Change Management</li>
+</ol>
+<p>Annex A: Lexical and Structural Constraints (normative)<br>
+Annex B: Conformance Test Requirements (normative)<br>
+Annex C: Complete Example and Workflow (informative)<br>
+Annex D: Design Rationale and Tradeoffs (informative)<br>
+Annex E: Editorial Basis and Further References (informative)<br>
+Annex F: Deliverables and Implementation Boundaries (informative)</p>
+<h2 id="1-overview">1. Overview</h2>
+<h3 id="11-scope">1.1 Scope</h3>
+<p>This specification defines storage of Markdown source inside a single <code>.svg</code> file, binding of that source to an SVG view, a basic editing workflow, and file and tool conformance. It applies to explanatory cards, flowcharts, architecture diagrams, short specifications, and visual knowledge documents.</p>
+<p>This revision defines only the <code>static</code> rendering profile. It does not define an HTML rendering profile, universal bidirectional Markdown/SVG conversion, a complete layout engine, a collaborative transport protocol, digital signatures, PDF pagination, a diagram semantics ontology, or accessibility certification.</p>
+<h3 id="12-purpose">1.2 Purpose</h3>
+<p>Implementations MUST allow extraction of Markdown without executing scripts or downloading dependencies. Producers MUST output independently displayable static SVG and preserve searchable, extractable text. Documents MUST distinguish content source, rendering output, and binding data.</p>
+<h3 id="13-applicability-limits">1.3 Applicability Limits</h3>
+<p>MISVG does not guarantee that every SVG application preserves metadata or that different fonts or renderers produce identical pixels. An AI that sees only an image cannot access MISVG source. A system MUST provide XML or extracted text to an AI or tool performing source processing.</p>
+<h2 id="2-normative-references">2. Normative References</h2>
+<p>The specified editions below are required for implementation. Except for restrictions explicitly stated here, underlying syntax and semantics follow these references. Future editions are not incorporated automatically.</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Reference and use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[BCP14a]</td>
+<td><a href="https://www.rfc-editor.org/rfc/rfc2119.html">RFC 2119, Key words for use in RFCs to Indicate Requirement Levels, 1997</a>: requirement levels, Clause 3.</td>
+</tr>
+<tr>
+<td>[BCP14b]</td>
+<td><a href="https://www.rfc-editor.org/rfc/rfc8174.html">RFC 8174, Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words, 2017</a>: uppercase interpretation, Clause 3.</td>
+</tr>
+<tr>
+<td>[XML]</td>
+<td><a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0, Fifth Edition, 2008</a>: XML syntax, characters, and line endings, Clauses 5 and 6.</td>
+</tr>
+<tr>
+<td>[XMLNS]</td>
+<td><a href="https://www.w3.org/TR/2009/REC-xml-names-20091208/">Namespaces in XML 1.0, Third Edition, 2009</a>: namespace identity, Clause 5.</td>
+</tr>
+<tr>
+<td>[SVG11]</td>
+<td><a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/">SVG 1.1, Second Edition, 2011</a>: static graphics, text, metadata, and <code>image/svg+xml</code>, Clauses 5, 7, and 14.</td>
+</tr>
+<tr>
+<td>[CM]</td>
+<td><a href="https://spec.commonmark.org/0.31.2/">CommonMark 0.31.2, 2024-01-28</a>: Markdown parsing, Clause 6.</td>
+</tr>
+<tr>
+<td>[MDTYPE]</td>
+<td><a href="https://www.rfc-editor.org/rfc/rfc7763.html">RFC 7763, The text/markdown Media Type, 2016</a>: source media type, Clauses 5 and 14.</td>
+</tr>
+<tr>
+<td>[SHA256]</td>
+<td><a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final">FIPS 180-4, Secure Hash Standard, August 2015</a>: SHA-256, Clause 8.</td>
+</tr>
+<tr>
+<td>[UUID]</td>
+<td><a href="https://www.rfc-editor.org/rfc/rfc9562.html">RFC 9562, Universally Unique IDentifiers, 2024</a>: UUIDv4, Clauses 5 and 8.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-terms-definitions-and-requirement-levels">3. Terms, Definitions, and Requirement Levels</h2>
+<h3 id="31-requirement-language">3.1 Requirement Language</h3>
+<p>The uppercase terms <code>MUST</code>, <code>MUST NOT</code>, <code>SHALL</code>, <code>SHALL NOT</code>, <code>SHOULD</code>, <code>SHOULD NOT</code>, and <code>MAY</code> are interpreted according to [BCP14a] and [BCP14b]. They have these normative meanings only when written entirely in uppercase. This document primarily uses <code>MUST</code> for mandatory requirements.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MUST / SHALL</td>
+<td>Required for conformance.</td>
+</tr>
+<tr>
+<td>MUST NOT / SHALL NOT</td>
+<td>Prohibited for conformance.</td>
+</tr>
+<tr>
+<td>SHOULD / SHOULD NOT</td>
+<td>Recommended / discouraged; a deviation requires understanding the consequences and documenting the reason.</td>
+</tr>
+<tr>
+<td>MAY</td>
+<td>A permitted option.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-definitions">3.2 Definitions</h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source</td>
+<td>The Markdown character sequence obtained by parsing <code>m:source</code>.</td>
+</tr>
+<tr>
+<td>View</td>
+<td>The unique SVG <code>g</code> subtree directly under the root and referenced by <code>m:presentation/@root-ref</code>.</td>
+</tr>
+<tr>
+<td>Source digest</td>
+<td>The SHA-256 value of the source bytes specified in 8.1.</td>
+</tr>
+<tr>
+<td>Binding</td>
+<td>A mapping from a source line range to a view element ID; it does not imply bidirectional reversibility.</td>
+</tr>
+<tr>
+<td>Document ID</td>
+<td>A UUIDv4 URN retained across revisions of the same document.</td>
+</tr>
+<tr>
+<td>Revision</td>
+<td>An increasing integer for committed content or presentation changes to a document.</td>
+</tr>
+<tr>
+<td>Profile</td>
+<td>Common restrictions on rendering capabilities inside the container.</td>
+</tr>
+<tr>
+<td>Unknown extension</td>
+<td>Metadata in an external namespace that the tool cannot fully interpret.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-processing-roles">3.3 Processing Roles</h3>
+<p>A Reader extracts and reports content; a Producer creates valid packages; an Editor modifies existing packages; a Validator performs checks within its declared scope. An ordinary SVG Viewer displays graphics and does not thereby qualify as a MISVG Reader.</p>
+<h2 id="4-architecture-and-authoritative-source">4. Architecture and Authoritative Source</h2>
+<h3 id="41-logical-model">4.1 Logical Model</h3>
+<p>A document MUST contain exactly one source, one presentation descriptor, and one view. Markdown is authoritative for content; bindings are indexes; SVG is a visual representation of the content.</p>
+<pre><code class="language-text">SVG container
+├── title + desc              summaries for people and assistive tools
+├── metadata
+│   └── m:document
+│       ├── m:source          sole content source
+│       ├── m:presentation    source digest, renderer, and view reference
+│       ├── m:bindings?       source lines → view IDs
+│       └── m:extensions?     optional metadata that does not change meaning
+└── g                         static graphical and textual view
+</code></pre>
+<h3 id="42-content-fidelity">4.2 Content Fidelity</h3>
+<p>A Producer MUST preserve the visible content and relationships expressed by the source and MUST NOT add substantive statements to the view that are absent from the source. Decoration, backgrounds, revision information, and the document identifier MAY be displayed but MUST be distinguishable from content. Markdown syntax markers and link reference definitions need not be displayed verbatim.</p>
+<p>For a flowchart view, arrow directions, conditions, and meanings MUST be derivable from explicit source statements. Inferring relationships solely from geometric position or color does not meet this requirement. Version 0.1 does not provide a general machine-readable relationship graph. Systems requiring node/edge queries SHOULD define a separately versioned extension specification.</p>
+<h3 id="43-inconsistency-handling">4.3 Inconsistency Handling</h3>
+<p>If source and view disagree, a Reader MUST report the source as authoritative and warn that the view is unreliable. An Editor MUST regenerate from the source, or explicitly edit the source to incorporate view changes before regeneration. An Editor MUST NOT automatically overwrite the source using OCR or geometric inference.</p>
+<h2 id="5-xml-container-and-fields">5. XML Container and Fields</h2>
+<h3 id="51-serialization-and-namespaces">5.1 Serialization and Namespaces</h3>
+<p>The container MUST be a UTF-8 XML 1.0 document conforming to [XML] and [XMLNS]. A Producer MUST NOT emit a UTF-8 BOM; a Reader MUST accept a UTF-8 BOM at the beginning of the file. If an XML declaration is present, its version MUST be <code>1.0</code>; if encoding is specified, it MUST be <code>UTF-8</code>, case-insensitively.</p>
+<p>The root MUST be <code>{http://www.w3.org/2000/svg}svg</code>. The MISVG 0.1 namespace is fixed as:</p>
+<pre><code class="language-text">https://example.org/ns/markdown-in-svg/0.1
+</code></pre>
+<p>This is a draft testing identifier, not a registered endpoint or a service URL controlled by this project. Tools MUST compare elements using the complete namespace URI and local name, MUST NOT depend on the example prefix <code>m</code>, and MUST NOT issue network requests to resolve the namespace.</p>
+<p>The root MUST contain exactly one <code>title</code>, one <code>desc</code>, one <code>metadata</code>, and one <code>g</code>, in that order, and no other child elements. The root MUST have <code>version="1.1"</code>, <code>width</code>, <code>height</code>, and <code>viewBox</code>. Dimensions and other attributes follow Clause 7. <code>title</code> and <code>desc</code> MUST contain nonempty plain text describing the document. This is a minimum descriptive requirement, not accessibility certification.</p>
+<p>Indentation whitespace MAY occur between elements except inside <code>m:source</code>; other non-whitespace character data MUST NOT occur in element-only containers. Comments MAY occur outside the source and have no normative meaning. Processing instructions other than the XML declaration, DOCTYPE declarations, and custom entity declarations MUST NOT occur.</p>
+<h3 id="52-document-metadata">5.2 Document Metadata</h3>
+<p><code>svg:metadata</code> MUST contain only one <code>m:document</code>. <code>m:document</code> MUST contain <code>m:source</code>, <code>m:presentation</code>, optional <code>m:bindings</code>, and optional <code>m:extensions</code> in that order, each at most once. Attributes on MISVG elements are unqualified except the explicitly specified <code>xml:space</code>.</p>
+<table>
+<thead>
+<tr>
+<th><code>m:document</code> attribute</th>
+<th>Requirement</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>version</code></td>
+<td>MUST</td>
+<td>Exactly <code>0.1</code>; distinct from the specification draft revision.</td>
+</tr>
+<tr>
+<td><code>profile</code></td>
+<td>MUST</td>
+<td>Exactly <code>static</code>.</td>
+</tr>
+<tr>
+<td><code>doc-id</code></td>
+<td>MUST</td>
+<td>Lowercase <code>urn:uuid:</code> followed by a UUIDv4 conforming to [UUID]; see Annex A.</td>
+</tr>
+<tr>
+<td><code>revision</code></td>
+<td>MUST</td>
+<td>Decimal integer from 1 through 9007199254740991, without leading zeros.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-source-element">5.3 Source Element</h3>
+<table>
+<thead>
+<tr>
+<th><code>m:source</code> attribute</th>
+<th>Requirement</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>media-type</code></td>
+<td>MUST</td>
+<td>Exactly <code>text/markdown</code>, according to [MDTYPE].</td>
+</tr>
+<tr>
+<td><code>dialect</code></td>
+<td>MUST</td>
+<td>Exactly <code>commonmark-0.31.2</code>; a MISVG token, not an IANA variant registration.</td>
+</tr>
+<tr>
+<td><code>xml:space</code></td>
+<td>MUST</td>
+<td>Exactly <code>preserve</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>m:source</code> MUST contain only text and/or CDATA, with no child elements, comments, or processing instructions. Its content MAY be empty. <code>xml:space</code> does not disable XML line-ending normalization.</p>
+<h3 id="54-presentation-descriptor">5.4 Presentation Descriptor</h3>
+<p><code>m:presentation</code> MUST be an empty element with these attributes:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>root-ref</code></td>
+<td>The view <code>g</code> ID, a bare ID without <code>#</code>.</td>
+</tr>
+<tr>
+<td><code>source-digest</code></td>
+<td><code>sha256:</code> followed by 64 lowercase hexadecimal characters.</td>
+</tr>
+<tr>
+<td><code>renderer</code></td>
+<td>Nonempty renderer name, 1–128 Unicode code points.</td>
+</tr>
+<tr>
+<td><code>renderer-version</code></td>
+<td>Nonempty renderer version, 1–64 Unicode code points; SemVer is not required.</td>
+</tr>
+</tbody>
+</table>
+<p>Renderer identity is diagnostic information and MUST NOT be treated as proof of a trusted origin. Matching renderer names and versions do not guarantee identical pixels. <code>root-ref</code> MUST reference the unique <code>g</code> directly under the root.</p>
+<h3 id="55-closed-core-vocabulary">5.5 Closed Core Vocabulary</h3>
+<p>Core MISVG elements MUST NOT contain undefined attributes or child elements. Unknown core vocabulary MUST be treated as invalid and cannot pass this version's validation by being ignored. External extensions are admitted only through <code>m:extensions</code> under Clause 10.</p>
+<h2 id="6-markdown-and-character-handling">6. Markdown and Character Handling</h2>
+<h3 id="61-normalized-source">6.1 Normalized Source</h3>
+<p>On import, a Producer MUST normalize CRLF and standalone CR to LF. Apart from that conversion, it MUST preserve all source characters, including trailing spaces, tabs, blank lines, the presence or absence of a final LF, and Unicode composition forms. It MUST NOT automatically trim, append a final newline, or apply NFC/NFD.</p>
+<p>A Reader MUST use the character sequence after XML parsing. Under [XML], physical line endings are normalized first; U+000D introduced by <code>&amp;#13;</code> is not removed by that step. If any U+000D occurs in the parsed source, a Reader MUST reject conformance and report <code>E_SOURCE</code>, rather than silently repair it and claim the original file is valid.</p>
+<p>Characters prohibited by XML 1.0, such as U+0000, MUST cause import failure; a Producer MUST NOT silently delete them. A file-leading BOM is not source content. U+FEFF inside the source is ordinary data and MUST be preserved.</p>
+<h3 id="62-markdown-semantics">6.2 Markdown Semantics</h3>
+<p>The source MUST be parsed according to [CM]. GFM tables, strikethrough, task lists, YAML front matter, mathematics, Mermaid execution, and include directives are not extension syntax in this version. Tools MUST NOT silently apply a meaning-changing dialect while claiming core 0.1 rendering.</p>
+<p>CommonMark raw HTML nodes MUST be rendered as visible text containing their original markup and MUST NOT execute as active HTML. Code blocks MUST be treated as text and MUST NOT be executed. Ordinary links MUST show their labels and immediately follow them with visible text of the resolved destination; an autolink already displaying its destination need not repeat it. Images MUST be represented by visible alternative text and destination text; if alternative text is empty, use the fixed string <code>[image]</code>. These are static output rules for this profile; parsing still follows CommonMark.</p>
+<p>Link destinations are data only. A Producer or Reader MUST NOT access them automatically during parsing or rendering. Relative paths in the source MUST be preserved and displayed as written, without automatic resolution against the document path or <code>xml:base</code>.</p>
+<h3 id="63-xml-escaping-and-round-trips">6.3 XML Escaping and Round Trips</h3>
+<p>A Producer MAY use XML text escaping or CDATA; both MUST yield the same source after extraction. If the source contains <code>]]&gt;</code>, a Producer using CDATA MUST split the section, for example using <code>]]]]&gt;&lt;![CDATA[&gt;</code> for that sequence, or use ordinary XML text escaping. Hashing MUST occur after XML decoding, not over CDATA tags or the literal spelling <code>&amp;amp;</code>.</p>
+<p>Lossless extraction means preservation of the normalized source character sequence. It does not promise reconstruction of an original <code>.md</code> file's BOM, CRLF bytes, XML prefixes, or attribute ordering.</p>
+<h2 id="7-static-rendering-profile">7. Static Rendering Profile</h2>
+<h3 id="71-element-allowlist">7.1 Element Allowlist</h3>
+<p>The following restrictions define a closed subset of [SVG11]. Elements, attributes, and namespaces not allowed here MUST NOT occur in the view.</p>
+<table>
+<thead>
+<tr>
+<th>Location / element</th>
+<th>Children</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Root <code>svg</code></td>
+<td>Only the four children in 5.1.</td>
+</tr>
+<tr>
+<td>View <code>g</code> and nested <code>g</code></td>
+<td><code>g</code>, <code>text</code>, <code>rect</code>, <code>circle</code>, <code>ellipse</code>, <code>line</code>, <code>polyline</code>, <code>polygon</code>, <code>path</code>.</td>
+</tr>
+<tr>
+<td><code>text</code>, <code>tspan</code></td>
+<td>Text and <code>tspan</code>.</td>
+</tr>
+<tr>
+<td>Geometric shapes</td>
+<td>No child elements.</td>
+</tr>
+</tbody>
+</table>
+<p><code>foreignObject</code>, <code>script</code>, <code>style</code>, <code>image</code>, <code>a</code>, <code>use</code>, <code>defs</code>, filters, animation, and external fonts are outside this profile. A Producer MUST NOT replace document content text with paths. Pure decoration or arrows MAY use paths.</p>
+<h3 id="72-attribute-allowlist">7.2 Attribute Allowlist</h3>
+<p>All attributes are unqualified; namespace declarations do not count as attributes. All view elements other than the root <code>svg</code> MAY have <code>id</code>. The root allows only <code>version</code>, <code>width</code>, <code>height</code>, and <code>viewBox</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Allowed attributes, in addition to <code>id</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g</code></td>
+<td><code>transform</code> and the common presentation attributes below.</td>
+</tr>
+<tr>
+<td><code>text</code>, <code>tspan</code></td>
+<td><code>x</code>, <code>y</code>, <code>dx</code>, <code>dy</code>, and common presentation attributes; <code>text</code> additionally allows <code>transform</code> and <code>xml:space="preserve"</code>.</td>
+</tr>
+<tr>
+<td><code>rect</code></td>
+<td><code>x</code>, <code>y</code>, <code>width</code>, <code>height</code>, <code>rx</code>, <code>ry</code>, <code>transform</code>, and common presentation attributes.</td>
+</tr>
+<tr>
+<td><code>circle</code></td>
+<td><code>cx</code>, <code>cy</code>, <code>r</code>, <code>transform</code>, and common presentation attributes.</td>
+</tr>
+<tr>
+<td><code>ellipse</code></td>
+<td><code>cx</code>, <code>cy</code>, <code>rx</code>, <code>ry</code>, <code>transform</code>, and common presentation attributes.</td>
+</tr>
+<tr>
+<td><code>line</code></td>
+<td><code>x1</code>, <code>y1</code>, <code>x2</code>, <code>y2</code>, <code>transform</code>, and common presentation attributes.</td>
+</tr>
+<tr>
+<td><code>polyline</code>, <code>polygon</code></td>
+<td><code>points</code>, <code>transform</code>, and common presentation attributes.</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td><code>d</code>, <code>transform</code>, and common presentation attributes.</td>
+</tr>
+</tbody>
+</table>
+<p>The common presentation attributes are limited to <code>fill</code>, <code>stroke</code>, <code>stroke-width</code>, <code>stroke-linecap</code>, <code>stroke-linejoin</code>, <code>font-family</code>, <code>font-size</code>, <code>font-weight</code>, <code>font-style</code>, and <code>text-anchor</code>. There is no other CSS entry point.</p>
+<p><code>fill</code> and <code>stroke</code> allow only <code>none</code> or <code>#RRGGBB</code>, with either hexadecimal case. <code>font-family</code> is a comma-separated list of nonempty names; each name contains only Unicode letters, decimal digits, ASCII spaces, and hyphens, with no quotes, parentheses, or escapes. It MUST end with one of <code>sans-serif</code>, <code>serif</code>, or <code>monospace</code>. Other enumerated values follow [SVG11]; <code>font-weight</code> is limited to <code>normal</code>, <code>bold</code>, or multiples of 100 from <code>100</code> through <code>900</code>; <code>font-style</code> is limited to <code>normal</code>, <code>italic</code>, or <code>oblique</code>.</p>
+<h3 id="73-geometry-and-canvas">7.3 Geometry and Canvas</h3>
+<p>Root <code>width</code> and <code>height</code> MUST be unitless decimal integers from 1 through 16384 without leading zeros; their product MUST NOT exceed 16777216. <code>viewBox</code> MUST express the four numeric values <code>0 0 width height</code>. Other lengths MUST be finite, unitless SVG numbers; font-size MUST be positive; stroke-width, dimensions, and radii MUST be nonnegative. In this version, <code>x</code>, <code>y</code>, <code>dx</code>, and <code>dy</code> on text/tspan allow only a single number. Percentages, units, CSS variables, <code>calc()</code>, and nonfinite values are not allowed.</p>
+<p>The grammars of <code>d</code>, <code>points</code>, and <code>transform</code> follow [SVG11], and all numeric values MUST be finite. <code>path</code> MUST have nonempty valid <code>d</code>; <code>polyline</code> and <code>polygon</code> MUST have valid <code>points</code>. Defaults, drawing order, and presentation attribute inheritance follow [SVG11].</p>
+<p>A Producer MUST place visible text within the canvas, avoiding clipping, overlapping text, or illegible foreground/background combinations. If fonts cannot cover the source language, the Producer MUST report a rendering limitation and cannot treat missing-glyph boxes as success. Exact font metrics and pixel alignment are not cross-implementation conformance requirements.</p>
+<h3 id="74-text-and-reading-order">7.4 Text and Reading Order</h3>
+<p>The XML order of the view SHOULD follow a reasonable reading order. Content text MUST use <code>text</code>/<code>tspan</code>. A Producer SHOULD use appropriate line breaks and styling for headings, paragraphs, lists, quotations, emphasis, and code; it must not depend on scripts for initial layout. Retaining the complete source does not automatically satisfy screen-reader or WCAG requirements.</p>
+<h2 id="8-digests-synchronization-and-editing-transactions">8. Digests, Synchronization, and Editing Transactions</h2>
+<h3 id="81-digest-algorithm">8.1 Digest Algorithm</h3>
+<p><code>source-digest</code> MUST be produced as follows:</p>
+<ol>
+<li>Use a secure XML parser to obtain all text/CDATA characters in <code>m:source</code>, concatenated in document order.</li>
+<li>Check Clause 6; do not remove whitespace or append LF.</li>
+<li>Encode the sequence as UTF-8 without a BOM.</li>
+<li>Compute SHA-256 according to [SHA256] and encode it as 64 lowercase hexadecimal characters.</li>
+<li>Prepend the ASCII string <code>sha256:</code>.</li>
+</ol>
+<pre><code class="language-text">source_digest = &quot;sha256:&quot; + lower_hex(SHA256(UTF8(source)))
+</code></pre>
+<p>The digest covers only the source, excluding document ID, revision, renderer, bindings, extensions, and SVG. No circular digest or XML canonicalization is required. Layout-only changes leave the digest unchanged.</p>
+<h3 id="82-binding-status">8.2 Binding Status</h3>
+<p>A Reader MUST compare the computed value with the declared value. A mismatch MUST produce <code>E_DIGEST_MISMATCH</code>. A Reader MAY extract the source in an unvalidated recovery mode but MUST NOT claim the package is valid.</p>
+<p>A match permits only the report <code>source-binding=matched</code>. Tools MUST NOT call this a valid signature, authenticated authorship, verified view, or trusted/safe content. Even with a matching digest, the view may have been independently changed, or an attacker may have changed both source and digest.</p>
+<h3 id="83-atomic-updates">8.3 Atomic Updates</h3>
+<p>For each committed change, an Editor MUST:</p>
+<ol>
+<li>Record SHA-256 of the original complete file bytes as a local precondition. This transaction fingerprint is not stored in the format.</li>
+<li>Modify source and/or layout according to user intent and regenerate the view and bindings as needed.</li>
+<li>Retain the <code>doc-id</code> and increment <code>revision</code> by 1; refuse the commit at the maximum revision value.</li>
+<li>Update <code>source-digest</code> and validate the candidate. Updating only the digest to hide a stale view is prohibited.</li>
+<li>Before writing, verify that the precondition still holds under a lock or storage-side compare-and-swap mechanism.</li>
+<li>Commit by atomic replacement or a transaction without an observable intermediate state. On failure, preserve the original.</li>
+</ol>
+<p>Only a result whose precondition holds may overwrite the original; otherwise the Editor MUST report <code>E_CONFLICT</code>. An unlocked check followed by a write does not satisfy this clause. Equal revisions do not imply equal files; an Editor MUST NOT detect conflicts using revision alone.</p>
+<p>A tool merely reserializing XML without changing source, presentation, bindings, or metadata MAY retain revision. A newly created document MUST begin at revision 1. A copy made into an independent document MUST receive a new UUIDv4 according to [UUID] and cannot reuse the example UUID. Moving a file or making a backup is not creating an independent document.</p>
+<h3 id="84-merging-and-recovery">8.4 Merging and Recovery</h3>
+<p>Implementations SHOULD perform a three-way merge of source and then regenerate the view. They MUST NOT treat a successful Git XML text merge as a successful semantic merge. A candidate containing unresolved source conflict markers MUST NOT be committed as a completed edit. If the markers are already intentional discussion content, an implementation MAY preserve them based on explicit context.</p>
+<p>If the source is lost or cannot be extracted, what remains is ordinary SVG and MUST NOT be claimed as valid MISVG. Repair MUST produce a distinguishable new result and MUST NOT silently modify the input file.</p>
+<h2 id="9-source-bindings">9. Source Bindings</h2>
+<p><code>m:bindings</code> MAY be omitted. If present, it MUST contain one or more empty <code>m:bind</code> elements. Every bind MUST have <code>target</code>, <code>start-line</code>, and <code>end-line</code>, and no other attributes.</p>
+<p><code>target</code> MUST be the bare ID of an existing view element and MUST occur at most once among bindings. All view IDs MUST be unique and conform to the ID grammar in Annex A. The view root <code>g</code> MUST have an ID. Multiple targets MAY map to the same source range.</p>
+<p>Ranges are <strong>one-based and inclusive at both ends</strong>. Split the source on LF; if its last character is LF, remove the final terminating empty split fragment. The empty source has zero lines. Thus <code>"a\n"</code> has 1 line, <code>"a\n\n"</code> has 2, and <code>"\n"</code> has 1. The constraint <code>1 ≤ start-line ≤ end-line ≤ line count</code> MUST hold.</p>
+<p>An empty source MUST have no bindings. Bindings need not cover every source line and do not prove complete rendering. After source changes, an Editor MUST recompute affected bindings or remove all bindings and MUST NOT retain known-stale line numbers. IDs SHOULD remain stable when a visual component's meaning has not changed.</p>
+<h2 id="10-extensions-versions-and-preservation">10. Extensions, Versions, and Preservation</h2>
+<h3 id="101-version-negotiation">10.1 Version Negotiation</h3>
+<p>A Reader MUST explicitly compare version, namespace, and profile. A Reader supporting only 0.1 that receives 0.2, 1.0, another namespace, or a non-<code>static</code> profile MUST report <code>E_UNSUPPORTED</code> rather than guess compatibility. It may recover data in an unvalidated recovery mode but MUST state its support limits.</p>
+<p>No compatibility is promised between 0.x versions. Specification revision <code>0.1.1</code> MAY be an editorial revision without a wire-format change. Adding mandatory fields or changing digest or content semantics MUST use a new wire version and namespace.</p>
+<h3 id="102-optional-extensions">10.2 Optional Extensions</h3>
+<p><code>m:extensions</code> MAY contain one or more elements in external namespaces. A top-level extension namespace MUST be nonempty and MUST NOT be the SVG, MISVG, or XML namespace. SVG and MISVG elements MUST NOT occur anywhere in the extension subtree. Extension text and attributes are inert data and cannot require code execution.</p>
+<p>Extensions may carry only ignorable supplementary metadata. They MUST NOT change core source authority, interpretation, security requirements, or view-generation semantics. A feature that would cause content to be misunderstood if ignored needs a separately specified profile/version; it cannot be placed in this optional extension mechanism.</p>
+<p>A Reader MAY ignore unknown extensions but MUST retain the core source interpretation. For a round trip with no content change, an Editor MUST preserve unknown extension element and attribute expanded names, string values, child-node order, and text. Prefixes, attribute order, and CDATA boundaries need not be preserved.</p>
+<p>If an Editor cannot determine whether an unknown extension remains valid after an edit, it MUST abort ordinary saving and report <code>E_EXTENSION_EDIT</code>, or save a separate result through an explicit “remove unknown extensions” operation. It cannot preserve an unknown stale digest or line range and claim synchronization. Only an explicit removal choice by the user or caller permits discarding such extensions.</p>
+<h2 id="11-conformance-and-interoperability">11. Conformance and Interoperability</h2>
+<h3 id="111-document-conformance">11.1 Document Conformance</h3>
+<p>A document claiming <code>MISVG 0.1 static</code> MUST satisfy every applicable MUST/MUST NOT in Clauses 4–10 and Annex A. Passing an XML Schema is one item of structural evidence and cannot replace source digest, reference, SVG subset, semantic, or visual checks.</p>
+<h3 id="112-role-conformance">11.2 Role Conformance</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Required capabilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reader</td>
+<td>Secure parsing; core structure/version recognition; lossless source extraction; digest checks; error and limitation reporting. An unchecked view cannot be called verified.</td>
+</tr>
+<tr>
+<td>Producer</td>
+<td>Conforming container and static profile; content/text preservation; digest and renderer metadata; content-fidelity and visual checks.</td>
+</tr>
+<tr>
+<td>Editor</td>
+<td>Reader and Producer requirements plus atomic updates, conflicts, revision, bindings, and unknown-extension handling.</td>
+</tr>
+<tr>
+<td>Validator</td>
+<td>Explicit check scope and reports under 11.3; partial checks cannot be presented as full conformance.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="113-validation-dimensions">11.3 Validation Dimensions</h3>
+<p>A Validator MUST report separately:</p>
+<ul>
+<li><code>structure</code>: XML, metadata, fields, uniqueness, and references.</li>
+<li><code>source-binding</code>: source rules, digest, and line ranges.</li>
+<li><code>static-profile</code>: all elements, attributes, value ranges, and underlying SVG grammar.</li>
+<li><code>content-fidelity</code>: preservation of the same substantive content in source and view.</li>
+<li><code>visual-review</code>: rendered text, reading order, clipping, overlap, and missing glyphs.</li>
+</ul>
+<p>Each status MUST be <code>pass</code>, <code>fail</code>, <code>not-checked</code>, or <code>unsupported</code>. A check not performed MUST be <code>not-checked</code>, never pass. Digest success implies no other dimension's success. A full conformance claim MUST have evidence of success in all five dimensions; the final two MAY involve human review.</p>
+<h3 id="114-interoperability-verification">11.4 Interoperability Verification</h3>
+<p>Implementations claiming role conformance MUST execute applicable Annex B cases and record results. Release testing for Producers and Editors SHOULD include two independent SVG renderers and cross-tool extraction/repackaging. Passing only this project's bundled example does not constitute general interoperability certification.</p>
+<h3 id="115-resource-limits">11.5 Resource Limits</h3>
+<p>Implementations MUST set publishable limits on file size, source size, XML depth, node count, string length, graphics complexity, and processing time. Initial deployments SHOULD use 8 MiB per file, 1 MiB of source, depth 64, 50000 nodes, and 65536 characters per path. These are implementation recommendations, not format validity ceilings. A stop due to limits MUST report <code>E_LIMIT</code>/<code>unsupported</code> and cannot establish that the input is malformed.</p>
+<h2 id="12-error-handling">12. Error Handling</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning / minimum behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E_XML</code></td>
+<td>Malformed XML, unsupported encoding, or prohibited declaration; stop normal parsing.</td>
+</tr>
+<tr>
+<td><code>E_STRUCTURE</code></td>
+<td>Invalid required field, order, cardinality, type, or core vocabulary.</td>
+</tr>
+<tr>
+<td><code>E_UNSUPPORTED</code></td>
+<td>Unsupported version, namespace, dialect, or profile; do not guess.</td>
+</tr>
+<tr>
+<td><code>E_SOURCE</code></td>
+<td>Source character/node rule violation.</td>
+</tr>
+<tr>
+<td><code>E_DIGEST_MISMATCH</code></td>
+<td>Computed and declared digests differ.</td>
+</tr>
+<tr>
+<td><code>E_REFERENCE</code></td>
+<td>Duplicate ID, invalid root-ref/target, or invalid line range.</td>
+</tr>
+<tr>
+<td><code>E_PROFILE</code></td>
+<td>Static element, attribute, or value restriction violation.</td>
+</tr>
+<tr>
+<td><code>E_CONTENT</code></td>
+<td>View omits, changes, or adds substantive content.</td>
+</tr>
+<tr>
+<td><code>E_VISUAL</code></td>
+<td>Observed clipping, overlap, missing glyphs, or unreadability.</td>
+</tr>
+<tr>
+<td><code>E_CONFLICT</code></td>
+<td>Original file changed; do not overwrite.</td>
+</tr>
+<tr>
+<td><code>E_EXTENSION_EDIT</code></td>
+<td>Unknown extension cannot safely be updated or preserved.</td>
+</tr>
+<tr>
+<td><code>E_LIMIT</code></td>
+<td>Published processing limit exceeded; not proof of format invalidity.</td>
+</tr>
+</tbody>
+</table>
+<p>When multiple errors coexist, an implementation MAY report the first or all, but MUST NOT execute dangerous content to obtain more diagnostics. Diagnostics SHOULD include an element path, field, or source line. They MUST NOT send the complete source, secrets, or full local paths to external services by default.</p>
+<h2 id="13-security-and-privacy-considerations">13. Security and Privacy Considerations</h2>
+<h3 id="131-xml-and-active-content">13.1 XML and Active Content</h3>
+<p>All processors MUST disable external entities, DTD loading, network schema resolution, and XInclude expansion. They MUST check untrusted input before introducing it into a DOM, browser, or other executable environment; displaying active SVG before sanitization is prohibited. CDATA is a string container, not a sanitizer.</p>
+<p>The static allowlist excludes event attributes, scripts, CSS <code>url()</code>, external resources, and external HTML. Source HTML, JavaScript, links, and instructions MUST remain data. Tools MUST limit resource use and stop affected processing on error.</p>
+<h3 id="132-ai-trust-boundary">13.2 AI Trust Boundary</h3>
+<p>Markdown, comments, extensions, and renderer names are untrusted document data. A receiver MUST NOT elevate their privileges because they claim to be “system instructions,” tool calls, upload requests, or permission declarations. An application sending a document to an AI MUST distinguish user authorization from document content. Source-driven code execution, network access, and file operations are outside MISVG parsing.</p>
+<h3 id="133-privacy-and-hidden-content">13.3 Privacy and Hidden Content</h3>
+<p>Content absent from the visible view may still exist in source or metadata. Publication tools MUST permit inspection of complete source and metadata and MUST NOT treat visual masking as deletion. Removing sensitive information MUST cover source, view, bindings, and extensions. A new public derivative document SHOULD receive a new doc-id.</p>
+<h3 id="134-integrity-and-authenticity">13.4 Integrity and Authenticity</h3>
+<p>An unkeyed SHA-256 digest cannot authenticate authors or prevent an attacker from rewriting both content and digest. This version defines no digital signature, trust root, timestamp, or revocation mechanism. Implementations MUST NOT claim that <code>source-digest</code> provides these guarantees.</p>
+<h2 id="14-iana-and-identifier-considerations">14. IANA and Identifier Considerations</h2>
+<p>This draft requests no new IANA registration. The outer media type MUST be <code>image/svg+xml</code> from [SVG11]. The embedded source is described with <code>text/markdown</code> from [MDTYPE]; no new media type or registered Markdown variant is introduced.</p>
+<p>Filenames SHOULD use <code>.misvg.svg</code> for recognition; ordinary <code>.svg</code> is also valid. Filenames do not replace namespace and structure detection. Tools MUST NOT present the unregistered <code>application/misvg</code> as this specification's official media type.</p>
+<p>The namespace is the draft identifier in 5.1. Before formal publication, maintainers MUST choose a sustainably governed namespace and define migration. Changing its URI does not automatically upgrade old files. IEEE, IETF, or W3C identifiers cannot be used without authorization as official registration marks for this specification.</p>
+<h2 id="15-version-governance-and-change-management">15. Version Governance and Change Management</h2>
+<p>Publishers MUST track specification draft revision, wire version, and individual document revision separately. Errata MUST identify affected clauses and interoperability impact. A change to wire semantics MUST use a new wire version.</p>
+<p>Before moving from 0.x to stable 1.0, maintainers SHOULD fix namespace governance and licensing, exchange documents between at least two independent Reader/Producer implementations, test characters and conflicts, review the threat model, and establish a formal compatibility policy. Future <code>html</code> profiles, diagram relationship models, resource packaging, style resources, and signatures SHOULD be separate proposals rather than unversioned changes to static.</p>
+<h2 id="annex-a-normative-lexical-and-structural-constraints">Annex A (normative): Lexical and Structural Constraints</h2>
+<p>The following regular expressions MUST match the whole string. Character ranges are ASCII unless stated otherwise.</p>
+<pre><code class="language-text">ID        = [A-Za-z][A-Za-z0-9._-]{0,63}
+DIGEST    = sha256:[0-9a-f]{64}
+POSINT    = [1-9][0-9]*
+UUID4URN  = urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
+</code></pre>
+<p>POSINT remains subject to each field's range. Element cardinality is:</p>
+<pre><code class="language-text">svg := title, desc, metadata, g
+metadata := m:document
+m:document := m:source, m:presentation, m:bindings?, m:extensions?
+m:source := XML character data / CDATA only
+m:presentation := empty
+m:bindings := m:bind+
+m:bind := empty
+m:extensions := foreign-element+
+</code></pre>
+<p><code>schema/misvg-metadata-0.1.xsd</code> is a helper schema for the metadata subtree, not the entire SVG. It does not cover every lexical detail, source digests, references, SVG value ranges, resource security, or visual requirements. XSD success alone cannot establish conformance.</p>
+<h2 id="annex-b-normative-conformance-test-requirements">Annex B (normative): Conformance Test Requirements</h2>
+<p>Implementations MUST cover applicable cases for their roles. “Valid” assumes all other conditions hold. After mutating a sample, tests MUST recompute its digest unless specifically testing a mismatch, to avoid masking the intended failure.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Input / operation</th>
+<th>Expected result</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T01</td>
+<td>Complete valid example</td>
+<td>Exact extraction, matching digest, readable rendering.</td>
+<td>All</td>
+</tr>
+<tr>
+<td>T02</td>
+<td>Replace <code>m</code> prefix, retain URI</td>
+<td>Equally valid; prefix-independent result.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T03</td>
+<td>Equivalent CDATA and XML escaping</td>
+<td>Identical extracted text and digest.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T04</td>
+<td>Source contains <code>]]&gt;</code>, <code>&amp;</code>, <code>&lt;</code></td>
+<td>Safe serialization and round trip.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T05</td>
+<td>Source <code>abc</code>, no LF</td>
+<td><code>sha256:ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad</code>.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T06</td>
+<td>Empty source</td>
+<td><code>sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</code>; no bindings.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T07</td>
+<td>Append LF to <code>abc</code></td>
+<td>Different digest; no trimming.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T08</td>
+<td>Physical CRLF versus LF in XML source</td>
+<td>Equivalent after XML decoding; same digest.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T09</td>
+<td><code>&amp;#13;</code> in source</td>
+<td><code>E_SOURCE</code>.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T10</td>
+<td><code>é</code> versus <code>e</code> + U+0301</td>
+<td>Distinct bytes preserved; distinct digests.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T11</td>
+<td>Change source, retain digest</td>
+<td><code>E_DIGEST_MISMATCH</code>; no synchronization claim.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T12</td>
+<td>Change view text only</td>
+<td>Digest may match; fidelity fails. Digest-only tools report fidelity not checked.</td>
+<td>P/E/V</td>
+</tr>
+<tr>
+<td>T13</td>
+<td>Second source/document or unknown core attribute</td>
+<td><code>E_STRUCTURE</code>.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T14</td>
+<td>Duplicate view IDs, invalid root-ref/target, out-of-range lines</td>
+<td><code>E_REFERENCE</code>.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T15</td>
+<td>Source child element or comment</td>
+<td><code>E_SOURCE</code> or <code>E_STRUCTURE</code>.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T16</td>
+<td>DOCTYPE, external entity, processing instruction</td>
+<td>Reject; no external network/file reads.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T17</td>
+<td>Script, event attribute, foreignObject, style, href, data URI, URL paint</td>
+<td><code>E_PROFILE</code>; no prior execution/loading.</td>
+<td>P/E/V</td>
+</tr>
+<tr>
+<td>T18</td>
+<td>Unknown version/profile/dialect</td>
+<td><code>E_UNSUPPORTED</code>; do not assume compatibility.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T19</td>
+<td>Reader encounters unknown inert extension</td>
+<td>May ignore; core interpretation unchanged; no execution.</td>
+<td>R/V</td>
+</tr>
+<tr>
+<td>T20</td>
+<td>Edit source with unknown extension</td>
+<td><code>E_EXTENSION_EDIT</code>, or explicitly chosen removal and separate save.</td>
+<td>E</td>
+</tr>
+<tr>
+<td>T21</td>
+<td>File changes after reading, even at same revision</td>
+<td><code>E_CONFLICT</code>; preserve original.</td>
+<td>E</td>
+</tr>
+<tr>
+<td>T22</td>
+<td>Interrupted commit / simulated write failure</td>
+<td>Existing file intact; no partial output exposed.</td>
+<td>E</td>
+</tr>
+<tr>
+<td>T23</td>
+<td>Content text becomes paths; clipping or missing glyphs</td>
+<td>Profile/visual-review or content-fidelity fails.</td>
+<td>P/E/V</td>
+</tr>
+<tr>
+<td>T24</td>
+<td>Published processing limits exceeded</td>
+<td><code>E_LIMIT</code>/unsupported, not necessarily invalid.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T25</td>
+<td>Remove metadata, leave SVG</td>
+<td>May be ordinary SVG; not MISVG.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T26</td>
+<td>Images, raw HTML, code, relative links in source</td>
+<td>Static output under 6.2; no automatic request/execution.</td>
+<td>P/E</td>
+</tr>
+<tr>
+<td>T27</td>
+<td>Line counts for empty source, trailing LF, consecutive LF</td>
+<td>Clause 9; no nonexistent lines may be bound.</td>
+<td>R/P/E/V</td>
+</tr>
+<tr>
+<td>T28</td>
+<td>File BOM versus source U+FEFF</td>
+<td>Accept former; preserve and hash latter.</td>
+<td>R/E/V</td>
+</tr>
+<tr>
+<td>T29</td>
+<td>Reserialize XML without content change</td>
+<td>Preserve source, digest, extension semantics; revision may stay.</td>
+<td>E</td>
+</tr>
+<tr>
+<td>T30</td>
+<td>Canvas bounds, nonfinite number, invalid path/transform</td>
+<td>static-profile fails.</td>
+<td>P/E/V</td>
+</tr>
+</tbody>
+</table>
+<p>R/P/E/V mean Reader, Producer, Editor, and Validator. Validator applicability is limited to its declared scope, but unchecked dimensions MUST be reported.</p>
+<h2 id="annex-c-informative-complete-example-and-workflow">Annex C (informative): Complete Example and Workflow</h2>
+<p>The default English example is <code>examples/order-flow.en.misvg.svg</code>, with extracted comparison source <code>examples/order-flow.en.md</code>. Japanese and Traditional Chinese counterparts use <code>.ja</code> and <code>.zh-Hant</code>. <code>examples/order-flow.misvg.svg</code> and <code>.md</code> remain the original Traditional Chinese fixture for compatibility. Example UUIDs are for testing and should not be reused for new documents.</p>
+<pre><code class="language-text"># Order workflow
+
+1. The customer completes payment.
+2. The warehouse confirms successful payment, then arranges shipment.
+
+Rule: Do not ship if payment has not succeeded.
+</code></pre>
+<p>Normal workflow: secure read → source extraction → binding checks → Markdown edit → view generation → line bindings and digest update → content and rendering checks → atomic commit. Layout changes also increment revision; unchanged source keeps its digest.</p>
+<p>A minimal Python digest illustration:</p>
+<pre><code class="language-python">import hashlib
+
+def source_digest(parsed_source: str) -&gt; str:
+    if &quot;\r&quot; in parsed_source:
+        raise ValueError(&quot;E_SOURCE&quot;)
+    return &quot;sha256:&quot; + hashlib.sha256(
+        parsed_source.encode(&quot;utf-8&quot;)
+    ).hexdigest()
+</code></pre>
+<p>This function does not handle secure XML parsing or validate the view. The example views are manually laid out from their sources; this package does not provide a general Markdown layout engine.</p>
+<h2 id="annex-d-informative-design-rationale-and-tradeoffs">Annex D (informative): Design Rationale and Tradeoffs</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Rationale and cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Markdown as sole content authority</td>
+<td>Avoids competing sources; drag-and-edit changes need an explicit write-back workflow.</td>
+</tr>
+<tr>
+<td>SVG metadata</td>
+<td>Carries source in the same file without rendering it; drawing/optimization tools may remove it.</td>
+</tr>
+<tr>
+<td>Native static SVG subset</td>
+<td>Reduces external dependencies and active content; no direct HTML tables, images, or full CSS.</td>
+</tr>
+<tr>
+<td>Fixed CommonMark edition</td>
+<td>Prevents dialect drift; GFM/Mermaid require a separate extension or version.</td>
+</tr>
+<tr>
+<td>Hash source only</td>
+<td>Simple, reproducible, no self-reference; no view integrity or signature guarantee.</td>
+</tr>
+<tr>
+<td>Optional line bindings</td>
+<td>Easy to implement and debug; not AST identity or arbitrary bidirectional editing.</td>
+</tr>
+<tr>
+<td>Closed core vocabulary</td>
+<td>Detects typos and version differences; new core capabilities require versioning.</td>
+</tr>
+<tr>
+<td>No pixel identity claim</td>
+<td>Fonts, platforms, and engines affect output; separate visual checks are necessary.</td>
+</tr>
+</tbody>
+</table>
+<p>The first version deliberately keeps interchange small. For long documents and complex tables, Markdown/HTML with SVG illustrations may remain more appropriate. This format serves cases where one graphic must retain its editable source.</p>
+<h2 id="annex-e-informative-editorial-basis-and-further-references">Annex E (informative): Editorial Basis and Further References</h2>
+<ul>
+<li><a href="https://www.rfc-editor.org/rfc/rfc7322.html">RFC 7322, RFC Style Guide</a>: abstract, status, clause cross-references, reference classification, and security organization; not every formatting rule is implemented here.</li>
+<li><a href="https://development.standards.ieee.org/myproject/Public/mytools/draft/styleman.pdf">IEEE SA Standards Style Manual, 2021</a>: overview/references/definitions order, verifiable requirements, and separation of normative and informative annexes.</li>
+<li><a href="https://standards.ieee.org/develop/drafting-standard/">IEEE SA — Drafting the Standard</a>: formal IEEE drafts follow that process and its templates; this draft has not undergone it.</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc2606.html">RFC 2606, Reserved Top Level DNS Names</a>: example domains; example.org indicates that formal namespace governance is not established.</li>
+<li><a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/metadata.html">SVG 1.1 Metadata</a>: SVG supports metadata in other XML namespaces; this draft newly defines the MISVG data model.</li>
+</ul>
+<h2 id="annex-f-informative-deliverables-and-implementation-boundaries">Annex F (informative): Deliverables and Implementation Boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>Attachment</th>
+<th>Purpose / boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MISVG-0.1.en.md</code>, <code>.zh-Hant.md</code>, <code>.ja.md</code></td>
+<td>Maintainable full specification texts; English is default and authoritative.</td>
+</tr>
+<tr>
+<td><code>index.html</code>, <code>MISVG-0.1.en.html</code></td>
+<td>English default entry and offline reading edition.</td>
+</tr>
+<tr>
+<td><code>MISVG-0.1.zh-Hant.html</code>, <code>MISVG-0.1.ja.html</code></td>
+<td>Offline translations with language navigation.</td>
+</tr>
+<tr>
+<td><code>schema/misvg-metadata-0.1.xsd</code></td>
+<td>Metadata subtree structure; not full SVG/security validation.</td>
+</tr>
+<tr>
+<td><code>examples/order-flow.{en,zh-Hant,ja}.misvg.svg</code></td>
+<td>Localized examples with matching source, actual digests, and line bindings.</td>
+</tr>
+<tr>
+<td><code>examples/order-flow.{en,zh-Hant,ja}.md</code></td>
+<td>Extraction comparison texts, not second authoritative sources.</td>
+</tr>
+<tr>
+<td><code>examples/order-flow.misvg.svg</code>, <code>.md</code></td>
+<td>Original Traditional Chinese compatibility fixture.</td>
+</tr>
+<tr>
+<td><code>tests/hash-vectors.json</code></td>
+<td>UTF-8 digest and line-count vectors.</td>
+</tr>
+<tr>
+<td><code>tests/check_package.py</code></td>
+<td>Package consistency and selected negative tests; not certification.</td>
+</tr>
+<tr>
+<td><code>tests/verification-report.json</code></td>
+<td>Executed package tests and unchecked dimensions.</td>
+</tr>
+<tr>
+<td><code>tests/render-checks.json</code>, <code>tests/visual-review.md</code></td>
+<td>Original single-Chromium bounds checks and visual review record.</td>
+</tr>
+<tr>
+<td><code>tests/localization-report.json</code></td>
+<td>Translation structure, identifiers, examples, and navigation checks.</td>
+</tr>
+<tr>
+<td><code>tests/localization-render-checks.json</code></td>
+<td>Multilingual desktop/mobile layout measurements.</td>
+</tr>
+<tr>
+<td><code>README.md</code>, <code>README.zh-Hant.md</code>, <code>README.ja.md</code></td>
+<td>English default instructions and translated companion instructions.</td>
+</tr>
+</tbody>
+</table>
+<p>Full role testing under Annex B requires additional test tooling and an actual editor. Bundled checks do not cover complete SVG grammar, all CommonMark rendering, concurrent transactions, or cross-renderer interoperability; passing them does not establish a complete implementation.</p></main></body></html>

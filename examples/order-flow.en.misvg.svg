@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:m="https://example.org/ns/markdown-in-svg/0.1" version="1.1" width="920" height="510" viewBox="0 0 920 510">
+  <title>Order workflow</title>
+  <desc>The customer completes payment. The warehouse confirms successful payment before arranging shipment. Do not ship if payment has not succeeded.</desc>
+  <metadata>
+    <m:document version="0.1" profile="static" doc-id="urn:uuid:7eab91ae-9b9f-444b-a10f-88f57787c613" revision="1">
+      <m:source media-type="text/markdown" dialect="commonmark-0.31.2" xml:space="preserve"><![CDATA[# Order workflow
+
+1. The customer completes payment.
+2. The warehouse confirms successful payment, then arranges shipment.
+
+Rule: Do not ship if payment has not succeeded.
+]]></m:source>
+      <m:presentation root-ref="view" source-digest="sha256:fe875a8bfaeed4165e42a69c90f29d52e7e9ed1145188110345b63b06fb760f7" renderer="misvg-reference-layout" renderer-version="0.1.0"/>
+      <m:bindings>
+        <m:bind target="heading" start-line="1" end-line="1"/>
+        <m:bind target="payment" start-line="3" end-line="3"/>
+        <m:bind target="shipping" start-line="4" end-line="4"/>
+        <m:bind target="rule" start-line="6" end-line="6"/>
+      </m:bindings>
+    </m:document>
+  </metadata>
+  <g id="view" font-family="Hiragino Sans, PingFang TC, Noto Sans CJK JP, sans-serif" fill="#152B3C">
+    <rect x="0" y="0" width="920" height="510" rx="20" fill="#F4F6F4"/>
+    <rect x="0" y="0" width="920" height="140" fill="#152B3C"/>
+    <text x="42" y="42" font-size="13" fill="#99D6C2">MISVG / 0.1</text>
+    <text id="heading" x="42" y="101" font-size="36" font-weight="bold" fill="#FFFFFF">Order workflow</text>
+    <g id="payment">
+      <rect x="42" y="181" width="340" height="154" rx="14" fill="#FFFFFF" stroke="#D9E3DE" stroke-width="1"/>
+      <circle cx="78" cy="219" r="18" fill="#DDF1E8"/>
+      <text x="78" y="225" text-anchor="middle" font-size="16" font-weight="bold">1</text>
+      <text x="66" y="266" font-size="21" font-weight="bold"><tspan x="66" y="266">Customer completes</tspan><tspan x="66" y="302">payment.</tspan></text></g>
+    <path d="M 405 259 L 486 259 M 473 248 L 487 259 L 473 270" fill="none" stroke="#26755B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <g id="shipping">
+      <rect x="512" y="181" width="366" height="154" rx="14" fill="#FFFFFF" stroke="#D9E3DE" stroke-width="1"/>
+      <circle cx="548" cy="219" r="18" fill="#DDF1E8"/>
+      <text x="548" y="225" text-anchor="middle" font-size="16" font-weight="bold">2</text>
+      <text x="536" y="265" font-size="21" font-weight="bold"><tspan x="536" y="265">Warehouse confirms</tspan><tspan x="536" y="292">successful payment, then</tspan><tspan x="536" y="319">arranges shipment.</tspan></text></g>
+    <g id="rule">
+      <rect x="42" y="371" width="836" height="68" rx="12" fill="#E2EEE8"/>
+      <text x="65" y="414" font-size="22" font-weight="bold">Rule: Do not ship if payment has not succeeded.</text>
+    </g>
+    <text x="42" y="480" font-size="12" fill="#5F746A">MISVG REFERENCE / REV 1</text>
+  </g>
+</svg>

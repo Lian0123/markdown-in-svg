@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:m="https://example.org/ns/markdown-in-svg/0.1"
+     version="1.1" width="920" height="510" viewBox="0 0 920 510">
+  <title>訂單流程</title>
+  <desc>客戶完成付款，倉庫確認付款成功後安排出貨。付款未成功，不得出貨。</desc>
+  <metadata>
+    <m:document version="0.1" profile="static"
+      doc-id="urn:uuid:39e08420-5eb6-4e8b-a98c-0ff063781d5a" revision="1">
+      <m:source media-type="text/markdown" dialect="commonmark-0.31.2" xml:space="preserve"><![CDATA[# 訂單流程
+
+1. 客戶完成付款。
+2. 倉庫確認付款成功後安排出貨。
+
+規則：付款未成功，不得出貨。
+]]></m:source>
+      <m:presentation root-ref="view" source-digest="sha256:c79c58d5f52618acb692ea24afeafcf2418454eded1553eef9c9ae67ea3ccaf7"
+        renderer="misvg-reference-layout" renderer-version="0.1.0"/>
+      <m:bindings>
+        <m:bind target="heading" start-line="1" end-line="1"/>
+        <m:bind target="payment" start-line="3" end-line="3"/>
+        <m:bind target="shipping" start-line="4" end-line="4"/>
+        <m:bind target="rule" start-line="6" end-line="6"/>
+      </m:bindings>
+    </m:document>
+  </metadata>
+  <g id="view" font-family="PingFang TC, Noto Sans CJK TC, sans-serif" fill="#152B3C">
+    <rect x="0" y="0" width="920" height="510" rx="20" fill="#F4F6F4"/>
+    <rect x="0" y="0" width="920" height="140" fill="#152B3C"/>
+    <text x="42" y="42" font-size="13" fill="#99D6C2">MISVG / 0.1</text>
+    <text id="heading" x="42" y="101" font-size="36" font-weight="bold" fill="#FFFFFF">訂單流程</text>
+    <g id="payment">
+      <rect x="42" y="181" width="340" height="154" rx="14" fill="#FFFFFF" stroke="#D9E3DE" stroke-width="1"/>
+      <circle cx="78" cy="219" r="18" fill="#DDF1E8"/>
+      <text x="78" y="225" text-anchor="middle" font-size="16" font-weight="bold">1</text>
+      <text x="66" y="286" font-size="25" font-weight="bold">客戶完成付款。</text>
+    </g>
+    <path d="M 405 259 L 486 259 M 473 248 L 487 259 L 473 270" fill="none" stroke="#26755B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <g id="shipping">
+      <rect x="512" y="181" width="366" height="154" rx="14" fill="#FFFFFF" stroke="#D9E3DE" stroke-width="1"/>
+      <circle cx="548" cy="219" r="18" fill="#DDF1E8"/>
+      <text x="548" y="225" text-anchor="middle" font-size="16" font-weight="bold">2</text>
+      <text x="536" y="274" font-size="25" font-weight="bold"><tspan x="536" y="274">倉庫確認付款成功後</tspan><tspan x="536" y="311">安排出貨。</tspan></text>
+    </g>
+    <g id="rule">
+      <rect x="42" y="371" width="836" height="68" rx="12" fill="#E2EEE8"/>
+      <text x="65" y="414" font-size="22" font-weight="bold">規則：付款未成功，不得出貨。</text>
+    </g>
+    <text x="42" y="480" font-size="12" fill="#5F746A">MISVG REFERENCE / REV 1</text>
+  </g>
+</svg>

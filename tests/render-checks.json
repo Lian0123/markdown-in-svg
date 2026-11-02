@@ -1,0 +1,70 @@
+{
+  "renderer": "Chromium via Playwright",
+  "svg_text_bounds": [
+    {
+      "text": "MISVG / 0.1",
+      "x": 42,
+      "y": 28,
+      "width": 72.40625,
+      "height": 18
+    },
+    {
+      "text": "訂單流程",
+      "x": 42,
+      "y": 63,
+      "width": 144,
+      "height": 50
+    },
+    {
+      "text": "1",
+      "x": 74.71875,
+      "y": 208,
+      "width": 6.5625,
+      "height": 22
+    },
+    {
+      "text": "客戶完成付款。",
+      "x": 66,
+      "y": 259,
+      "width": 175,
+      "height": 36
+    },
+    {
+      "text": "2",
+      "x": 543.1953125,
+      "y": 208,
+      "width": 9.609375,
+      "height": 22
+    },
+    {
+      "text": "倉庫確認付款成功後安排出貨。",
+      "x": 536,
+      "y": 247,
+      "width": 225,
+      "height": 73
+    },
+    {
+      "text": "規則：付款未成功，不得出貨。",
+      "x": 65,
+      "y": 391,
+      "width": 308,
+      "height": 30
+    },
+    {
+      "text": "MISVG REFERENCE / REV 1",
+      "x": 42,
+      "y": 467,
+      "width": 158.96875,
+      "height": 17
+    }
+  ],
+  "html_desktop": {
+    "scrollWidth": 1100,
+    "viewport": 1100,
+    "headings": 24
+  },
+  "html_mobile": {
+    "scrollWidth": 390,
+    "viewport": 390
+  }
+}

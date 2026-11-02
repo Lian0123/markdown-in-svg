@@ -1,0 +1,191 @@
+{
+  "specification": "MISVG-SPEC-0001 Draft 02",
+  "scope": "Package consistency and partial metadata/source-binding tests; NOT complete conformance",
+  "passed": 36,
+  "failed": 0,
+  "cases": [
+    {
+      "case": "sample-extraction-exact",
+      "result": "pass"
+    },
+    {
+      "case": "namespace-prefix-independent",
+      "result": "pass"
+    },
+    {
+      "case": "xml-crlf-normalization",
+      "result": "pass"
+    },
+    {
+      "case": "file-bom-accepted",
+      "result": "pass"
+    },
+    {
+      "case": "vector-empty",
+      "result": "pass"
+    },
+    {
+      "case": "vector-abc",
+      "result": "pass"
+    },
+    {
+      "case": "vector-abc-lf",
+      "result": "pass"
+    },
+    {
+      "case": "vector-blank-line",
+      "result": "pass"
+    },
+    {
+      "case": "vector-two-lines",
+      "result": "pass"
+    },
+    {
+      "case": "vector-trailing-spaces",
+      "result": "pass"
+    },
+    {
+      "case": "vector-nfc-e",
+      "result": "pass"
+    },
+    {
+      "case": "vector-nfd-e",
+      "result": "pass"
+    },
+    {
+      "case": "vector-cjk",
+      "result": "pass"
+    },
+    {
+      "case": "vector-xml-special",
+      "result": "pass"
+    },
+    {
+      "case": "vector-source-bom",
+      "result": "pass"
+    },
+    {
+      "case": "known-sha256-abc",
+      "result": "pass"
+    },
+    {
+      "case": "known-sha256-empty",
+      "result": "pass"
+    },
+    {
+      "case": "stale-source-digest",
+      "result": "pass",
+      "expected_error": "E_DIGEST_MISMATCH"
+    },
+    {
+      "case": "decoded-cr-rejected",
+      "result": "pass",
+      "expected_error": "E_SOURCE"
+    },
+    {
+      "case": "duplicate-source",
+      "result": "pass",
+      "expected_error": "E_STRUCTURE"
+    },
+    {
+      "case": "unknown-core-attribute",
+      "result": "pass",
+      "expected_error": "E_STRUCTURE"
+    },
+    {
+      "case": "source-child-rejected",
+      "result": "pass",
+      "expected_error": "E_SOURCE"
+    },
+    {
+      "case": "source-comment-rejected",
+      "result": "pass",
+      "expected_error": "E_SOURCE"
+    },
+    {
+      "case": "unknown-version",
+      "result": "pass",
+      "expected_error": "E_UNSUPPORTED"
+    },
+    {
+      "case": "unknown-profile",
+      "result": "pass",
+      "expected_error": "E_UNSUPPORTED"
+    },
+    {
+      "case": "unknown-dialect",
+      "result": "pass",
+      "expected_error": "E_UNSUPPORTED"
+    },
+    {
+      "case": "bad-root-ref",
+      "result": "pass",
+      "expected_error": "E_REFERENCE"
+    },
+    {
+      "case": "bad-target",
+      "result": "pass",
+      "expected_error": "E_REFERENCE"
+    },
+    {
+      "case": "out-of-range-line",
+      "result": "pass",
+      "expected_error": "E_REFERENCE"
+    },
+    {
+      "case": "duplicate-id",
+      "result": "pass",
+      "expected_error": "E_REFERENCE"
+    },
+    {
+      "case": "script-screen",
+      "result": "pass",
+      "expected_error": "E_PROFILE"
+    },
+    {
+      "case": "event-screen",
+      "result": "pass",
+      "expected_error": "E_PROFILE"
+    },
+    {
+      "case": "foreignobject-screen",
+      "result": "pass",
+      "expected_error": "E_PROFILE"
+    },
+    {
+      "case": "view-tamper-not-detectable-by-source-digest",
+      "result": "pass",
+      "expected_error": null
+    },
+    {
+      "case": "doctype-rejected",
+      "result": "pass"
+    },
+    {
+      "case": "pi-rejected",
+      "result": "pass"
+    }
+  ],
+  "sample_checks": {
+    "metadata_xsd": "pass",
+    "source_extraction": "pass",
+    "source_digest": "pass",
+    "ids_and_line_bindings": "pass",
+    "basic_element_screen": "pass"
+  },
+  "full_conformance_dimensions": {
+    "structure": "not-checked",
+    "source-binding": "pass",
+    "static-profile": "not-checked",
+    "content-fidelity": "not-checked",
+    "visual-review": "not-checked"
+  },
+  "not_covered": [
+    "Full SVG attribute/value grammar",
+    "Complete CommonMark rendering",
+    "General resource limits",
+    "Unknown extension edit behavior",
+    "Editor atomicity and conflict tests",
+    "Independent cross-renderer interoperability"
+  ]
+}

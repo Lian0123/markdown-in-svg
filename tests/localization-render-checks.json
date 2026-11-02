@@ -1,0 +1,237 @@
+{
+  "renderer": "Chromium via Playwright",
+  "languages": {
+    "en": {
+      "desktop": {
+        "viewport": 1100,
+        "scrollWidth": 1100,
+        "headings": 60
+      },
+      "mobile": {
+        "viewport": 390,
+        "scrollWidth": 390
+      },
+      "svg": [
+        {
+          "text": "MISVG / 0.1",
+          "x": 42,
+          "y": 31,
+          "width": 78.375,
+          "height": 13,
+          "withinCanvas": true
+        },
+        {
+          "text": "Order workflow",
+          "x": 42,
+          "y": 69,
+          "width": 302.328125,
+          "height": 36,
+          "withinCanvas": true
+        },
+        {
+          "text": "1",
+          "x": 72.296875,
+          "y": 211,
+          "width": 11.40625,
+          "height": 16,
+          "withinCanvas": true
+        },
+        {
+          "text": "Customer completespayment.",
+          "x": 66,
+          "y": 248,
+          "width": 235.625,
+          "height": 58.36798095703125,
+          "withinCanvas": true
+        },
+        {
+          "text": "2",
+          "x": 542.296875,
+          "y": 211,
+          "width": 11.40625,
+          "height": 16,
+          "withinCanvas": true
+        },
+        {
+          "text": "Warehouse confirmssuccessful payment, thenarranges shipment.",
+          "x": 536,
+          "y": 247,
+          "width": 290.578125,
+          "height": 76.36801147460938,
+          "withinCanvas": true
+        },
+        {
+          "text": "Rule: Do not ship if payment has not succeeded.",
+          "x": 65,
+          "y": 395,
+          "width": 573.015625,
+          "height": 23.57598876953125,
+          "withinCanvas": true
+        },
+        {
+          "text": "MISVG REFERENCE / REV 1",
+          "x": 42,
+          "y": 469,
+          "width": 168.46875,
+          "height": 12.787994384765625,
+          "withinCanvas": true
+        }
+      ]
+    },
+    "zh-Hant": {
+      "desktop": {
+        "viewport": 1100,
+        "scrollWidth": 1100,
+        "headings": 60
+      },
+      "mobile": {
+        "viewport": 390,
+        "scrollWidth": 390
+      },
+      "svg": [
+        {
+          "text": "MISVG / 0.1",
+          "x": 42,
+          "y": 28,
+          "width": 72.40625,
+          "height": 18,
+          "withinCanvas": true
+        },
+        {
+          "text": "訂單流程",
+          "x": 42,
+          "y": 63,
+          "width": 144,
+          "height": 50,
+          "withinCanvas": true
+        },
+        {
+          "text": "1",
+          "x": 74.71875,
+          "y": 208,
+          "width": 6.5625,
+          "height": 22,
+          "withinCanvas": true
+        },
+        {
+          "text": "客戶完成付款。",
+          "x": 66,
+          "y": 259,
+          "width": 175,
+          "height": 36,
+          "withinCanvas": true
+        },
+        {
+          "text": "2",
+          "x": 543.1953125,
+          "y": 208,
+          "width": 9.609375,
+          "height": 22,
+          "withinCanvas": true
+        },
+        {
+          "text": "倉庫確認付款成功後安排出貨。",
+          "x": 536,
+          "y": 247,
+          "width": 225,
+          "height": 73,
+          "withinCanvas": true
+        },
+        {
+          "text": "規則：付款未成功，不得出貨。",
+          "x": 65,
+          "y": 391,
+          "width": 308,
+          "height": 30,
+          "withinCanvas": true
+        },
+        {
+          "text": "MISVG REFERENCE / REV 1",
+          "x": 42,
+          "y": 467,
+          "width": 158.96875,
+          "height": 17,
+          "withinCanvas": true
+        }
+      ]
+    },
+    "ja": {
+      "desktop": {
+        "viewport": 1100,
+        "scrollWidth": 1100,
+        "headings": 60
+      },
+      "mobile": {
+        "viewport": 390,
+        "scrollWidth": 390
+      },
+      "svg": [
+        {
+          "text": "MISVG / 0.1",
+          "x": 42,
+          "y": 31,
+          "width": 78.375,
+          "height": 13,
+          "withinCanvas": true
+        },
+        {
+          "text": "注文フロー",
+          "x": 42,
+          "y": 69,
+          "width": 180,
+          "height": 36,
+          "withinCanvas": true
+        },
+        {
+          "text": "1",
+          "x": 72.296875,
+          "y": 211,
+          "width": 11.40625,
+          "height": 16,
+          "withinCanvas": true
+        },
+        {
+          "text": "顧客が支払いを完了する。",
+          "x": 66,
+          "y": 246,
+          "width": 161,
+          "height": 59,
+          "withinCanvas": true
+        },
+        {
+          "text": "2",
+          "x": 542.296875,
+          "y": 211,
+          "width": 11.40625,
+          "height": 16,
+          "withinCanvas": true
+        },
+        {
+          "text": "倉庫が支払い成功を確認してから出荷を手配する。",
+          "x": 536,
+          "y": 250,
+          "width": 274.859375,
+          "height": 62,
+          "withinCanvas": true
+        },
+        {
+          "text": "規則：支払いが成功していない場合は出荷しない。",
+          "x": 65,
+          "y": 396,
+          "width": 481.953125,
+          "height": 21,
+          "withinCanvas": true
+        },
+        {
+          "text": "MISVG REFERENCE / REV 1",
+          "x": 42,
+          "y": 469,
+          "width": 168.46875,
+          "height": 12.787994384765625,
+          "withinCanvas": true
+        }
+      ]
+    }
+  },
+  "scope": "One renderer; screenshots inspected separately; not cross-renderer certification"
+}

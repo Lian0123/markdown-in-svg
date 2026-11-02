@@ -1,0 +1,13 @@
+{
+  "defaultLanguage": "en",
+  "fallbackLanguage": "en",
+  "authoritativeLanguage": "en",
+  "entryPoint": "index.html",
+  "specificationRevision": "0.1.1",
+  "wireVersion": "0.1",
+  "editions": {
+    "en": {"label": "English", "markdown": "MISVG-0.1.en.md", "html": "MISVG-0.1.en.html", "readme": "README.md", "example": "examples/order-flow.en.misvg.svg"},
+    "zh-Hant": {"label": "繁體中文", "markdown": "MISVG-0.1.zh-Hant.md", "html": "MISVG-0.1.zh-Hant.html", "readme": "README.zh-Hant.md", "example": "examples/order-flow.zh-Hant.misvg.svg"},
+    "ja": {"label": "日本語", "markdown": "MISVG-0.1.ja.md", "html": "MISVG-0.1.ja.html", "readme": "README.ja.md", "example": "examples/order-flow.ja.misvg.svg"}
+  }
+}
