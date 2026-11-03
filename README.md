@@ -1,6 +1,6 @@
 # Markdown-in-SVG 0.1 — Trilingual Specification
 
-**Default and authoritative language: English.** [English](MISVG-0.1.en.html) · [繁體中文](MISVG-0.1.zh-Hant.html) · [日本語](MISVG-0.1.ja.html)
+**Default and authoritative language: English.** [English](MISVG-0.1.en.md) · [繁體中文](MISVG-0.1.zh-Hant.md) · [日本語](MISVG-0.1.ja.md)
 
 MISVG-SPEC-0001 revision 0.1.1 / Draft 02 contains full English, Traditional Chinese, and Japanese editions. Open `index.html` for the default English reading edition; each edition provides language navigation. `MISVG-0.1.md` is the default English Markdown copy. Edit the language-specific Markdown files and regenerate the publication.
 

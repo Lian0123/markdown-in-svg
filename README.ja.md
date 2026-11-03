@@ -1,6 +1,6 @@
 # Markdown-in-SVG 0.1 — 日中英の三言語仕様
 
-**既定言語および正文：英語。** [English](MISVG-0.1.en.html) · [繁體中文](MISVG-0.1.zh-Hant.html) · [日本語](MISVG-0.1.ja.html)
+**既定言語および正文：英語。** [English](MISVG-0.1.en.md) · [繁體中文](MISVG-0.1.zh-Hant.md) · [日本語](MISVG-0.1.ja.md)
 
 MISVG-SPEC-0001 改訂 0.1.1 / Draft 02 は英語、繁体字中国語、日本語の全文を提供する。`index.html` は英語の既定閲覧版であり、各版に言語切替がある。`MISVG-0.1.md` は既定の英語 Markdown のコピーである。言語別 Markdown を編集してから出版物を再生成する。
 
